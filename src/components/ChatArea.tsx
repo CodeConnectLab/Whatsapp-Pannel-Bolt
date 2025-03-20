@@ -51,7 +51,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ conversation, onSendMessage }) => {
       }
       
       // Show success message
-      message.success('Message sent!');
+      // message.success('Message sent!');
       
       // Clear the input field
       setMessageText('');

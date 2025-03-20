@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { ConfigProvider, Dropdown } from 'antd';
-import { Bell, User } from 'lucide-react';
+import { Bell, MessageCircleMore, User } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import ChatList from './components/ChatList';
 import ChatArea from './components/ChatArea';
 import ContactInfo from './components/ContactInfo';
 import PageContent from './components/PageContent';
+import Footer from './components/Footer';
 import { mockContacts, mockConversations } from './data/mockData';
 import { Contact, Conversation } from './types';
 
@@ -56,7 +57,8 @@ function App() {
       <div className="flex h-screen bg-gray-100">
         <div className="bg-[#128C7E] text-white py-2 px-4 fixed top-0 w-full z-10 flex items-center justify-between">
           <div className="flex items-center">
-            <h1 className="text-xl font-semibold">WhatsApp Panel</h1>
+          <MessageCircleMore className='mr-2'/>
+            <h1 className="text-xl font-semibold"> WhatsApp Panel</h1>
           </div>
           <div className="flex items-center space-x-4">
             <Bell className="text-white hover:text-gray-200 cursor-pointer" size={24} />
@@ -76,19 +78,23 @@ function App() {
           onSelectItem={handleSelectNavItem}
         />
         
-        {shouldShowChatInterface ? (
-          <>
-            <ChatList
-              contacts={mockContacts}
-              selectedContact={selectedContact}
-              onSelectContact={handleSelectContact}
-            />
-            <ChatArea conversation={currentConversation} />
-            <ContactInfo contact={selectedContact} />
-          </>
-        ) : (
-          <PageContent pageId={activePage} />
-        )}
+        <div className="flex-1 flex flex-col" style={{ paddingBottom: '50px' }}>
+          {shouldShowChatInterface ? (
+            <div className="flex flex-1">
+              <ChatList
+                contacts={mockContacts}
+                selectedContact={selectedContact}
+                onSelectContact={handleSelectContact}
+              />
+              <ChatArea conversation={currentConversation} />
+              <ContactInfo contact={selectedContact} />
+            </div>
+          ) : (
+            <PageContent pageId={activePage} />
+          )}
+        </div>
+        
+        <Footer />
       </div>
     </ConfigProvider>
   );
