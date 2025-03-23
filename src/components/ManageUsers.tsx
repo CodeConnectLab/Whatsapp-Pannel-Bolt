@@ -28,22 +28,22 @@ interface User {
 const mockUsers: User[] = [
   {
     id: 'user-1',
-    name: 'Admin User',
-    email: 'admin@example.com',
+    name: 'Shashank',
+    email: 'Shashank@example.com',
     role: 'admin',
     isActive: true
   },
   {
     id: 'user-2',
-    name: 'Agent One',
-    email: 'agent1@example.com',
+    name: 'Abhilekh',
+    email: 'Abhilekh@example.com',
     role: 'agent',
     isActive: true
   },
   {
     id: 'user-3',
-    name: 'Agent Two',
-    email: 'agent2@example.com',
+    name: 'Himanshu',
+    email: 'Himanshu@example.com',
     role: 'agent',
     isActive: false
   }
