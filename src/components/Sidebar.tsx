@@ -7,7 +7,8 @@ import {
   FileText, 
   ChevronRight, 
   ChevronLeft, 
-  Contact
+  Contact,
+  Tags
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -23,6 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ expanded, onToggle, activeItem, onSel
     { icon: MessageSquare, label: 'Live Chat - Inbox', id: 'live-chat' },
     { icon: FileText, label: 'Template', id: 'template' },
     { icon: Users, label: 'Users', id: 'users' },
+    { icon: Tags, label: 'Manage Tags', id: 'manage-tags' },
     { icon: History, label: 'History', id: 'history' },
     { icon: Contact, label: 'Contacts', id: 'contacts' }
   ];
