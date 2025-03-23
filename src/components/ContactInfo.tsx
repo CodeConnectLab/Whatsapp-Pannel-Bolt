@@ -1,24 +1,31 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Collapse, Dropdown, Tag as AntTag, message } from 'antd';
-import { Contact, Tag } from '../types';
-import { mockTags } from '../data/mockData';
-import { Plus } from 'lucide-react';
+import { Button, Collapse, Dropdown, Tag as AntTag, message, Select } from 'antd';
+import { Contact, Tag, User } from '../types';
+import { mockTags, mockUsers } from '../data/mockData';
+import { Plus, UserCog } from 'lucide-react';
 
 interface ContactInfoProps {
   contact?: Contact;
+  onAssignChat?: (contactId: string, userId: string | null) => void;
 }
 
-const ContactInfo: React.FC<ContactInfoProps> = ({ contact }) => {
+const ContactInfo: React.FC<ContactInfoProps> = ({ contact, onAssignChat }) => {
   const [tags, setTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [assignedToUserId, setAssignedToUserId] = useState<string | null>(null);
 
   useEffect(() => {
     // Load tags from mock data
     setTags(mockTags);
     
-    // Set selected tags from contact if available
+    // Load active users from mock data
+    setUsers(mockUsers.filter(user => user.isActive));
+    
+    // Set selected tags and assignment from contact if available
     if (contact && contact.id) {
       setSelectedTags([]); // Reset for new contact
+      setAssignedToUserId(contact.assignedTo || null);
       // In a real app, you would fetch the contact's tags here
     }
   }, [contact?.id]);
@@ -37,6 +44,14 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ contact }) => {
   const handleRemoveTag = (tagId: string) => {
     setSelectedTags(selectedTags.filter(id => id !== tagId));
     message.success('Tag removed successfully');
+  };
+
+  const handleAssignUser = (userId: string | null) => {
+    setAssignedToUserId(userId);
+    if (onAssignChat && contact) {
+      onAssignChat(contact.id, userId);
+    }
+    message.success(userId ? `Chat assigned to ${users.find(u => u.id === userId)?.name}` : 'Chat unassigned');
   };
 
   const tagMenuItems = activeTags
@@ -79,6 +94,27 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ contact }) => {
             <p className="mt-1">{contact.language}</p>
           </div>
         )}
+        
+        <div>
+          <h3 className="text-sm font-medium text-gray-500 mb-2 flex items-center">
+            <UserCog size={16} className="mr-2" /> Assign To
+          </h3>
+          <Select 
+            className="w-full" 
+            placeholder="Select an agent or admin"
+            value={assignedToUserId || undefined}
+            onChange={handleAssignUser}
+            allowClear
+            onClear={() => handleAssignUser(null)}
+          >
+            <Select.Option value={null}>Unassigned</Select.Option>
+            {users.map(user => (
+              <Select.Option key={user.id} value={user.id}>
+                {user.name} ({user.role})
+              </Select.Option>
+            ))}
+          </Select>
+        </div>
       </div>
 
       <Collapse className="mt-6" ghost>

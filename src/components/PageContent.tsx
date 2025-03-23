@@ -1,5 +1,6 @@
 import React from 'react';
 import ManageTags from './ManageTags';
+import ManageUsers from './ManageUsers'; // Import the ManageUsers component
 
 interface PageContentProps {
   pageId: string;
@@ -52,38 +53,7 @@ const PageContent: React.FC<PageContentProps> = ({ pageId }) => {
         );
 
       case 'users':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Users</h1>
-            <p>Manage system users and their permissions.</p>
-            <div className="bg-white p-4 rounded-lg shadow mt-6">
-              <table className="min-w-full">
-                <thead>
-                  <tr>
-                    <th className="text-left py-2 px-3">Name</th>
-                    <th className="text-left py-2 px-3">Email</th>
-                    <th className="text-left py-2 px-3">Role</th>
-                    <th className="text-left py-2 px-3">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-t">
-                    <td className="py-2 px-3">John Doe</td>
-                    <td className="py-2 px-3">john@example.com</td>
-                    <td className="py-2 px-3">Admin</td>
-                    <td className="py-2 px-3 text-green-500">Active</td>
-                  </tr>
-                  <tr className="border-t">
-                    <td className="py-2 px-3">Jane Smith</td>
-                    <td className="py-2 px-3">jane@example.com</td>
-                    <td className="py-2 px-3">Agent</td>
-                    <td className="py-2 px-3 text-green-500">Active</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
+        return <ManageUsers />; // Use the ManageUsers component
 
       case 'history':
         return (

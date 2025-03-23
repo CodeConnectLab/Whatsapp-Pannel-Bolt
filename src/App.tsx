@@ -17,6 +17,8 @@ function App() {
     return localStorage.getItem('isLoggedIn') === 'true';
   });
 
+  const [contacts, setContacts] = useState<Contact[]>(mockContacts);
+  const [conversations, setConversations] = useState<Conversation[]>(mockConversations);
   const [selectedContact, setSelectedContact] = useState<Contact | undefined>();
   const [currentConversation, setCurrentConversation] = useState<Conversation | undefined>();
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
@@ -24,7 +26,7 @@ function App() {
 
   const handleSelectContact = (contact: Contact) => {
     setSelectedContact(contact);
-    const conversation = mockConversations.find((conv) => conv.contact.id === contact.id);
+    const conversation = conversations.find((conv) => conv.contact.id === contact.id);
     setCurrentConversation(conversation);
   };
 
@@ -35,6 +37,45 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false); // Set login state to false
     localStorage.removeItem('isLoggedIn'); // Clear login state from localStorage
+  };
+
+  // Handle assigning a chat to a user
+  const handleAssignChat = (contactId: string, userId: string | null) => {
+    // Update contacts
+    setContacts(prevContacts => 
+      prevContacts.map(contact => 
+        contact.id === contactId 
+          ? { ...contact, assignedTo: userId } 
+          : contact
+      )
+    );
+    
+    // Update conversations
+    setConversations(prevConversations => 
+      prevConversations.map(conversation => 
+        conversation.contact.id === contactId 
+          ? { 
+              ...conversation, 
+              assignedTo: userId,
+              contact: { ...conversation.contact, assignedTo: userId }
+            } 
+          : conversation
+      )
+    );
+    
+    // Update selected contact if it's the one being assigned
+    if (selectedContact && selectedContact.id === contactId) {
+      setSelectedContact({ ...selectedContact, assignedTo: userId });
+    }
+    
+    // Update current conversation if it's the one being assigned
+    if (currentConversation && currentConversation.contact.id === contactId) {
+      setCurrentConversation({
+        ...currentConversation,
+        assignedTo: userId,
+        contact: { ...currentConversation.contact, assignedTo: userId }
+      });
+    }
   };
 
   const shouldShowChatInterface = activePage === 'live-chat';
@@ -105,12 +146,15 @@ function App() {
           {shouldShowChatInterface ? (
             <div className="flex flex-1">
               <ChatList
-                contacts={mockContacts}
+                contacts={contacts}
                 selectedContact={selectedContact}
                 onSelectContact={handleSelectContact}
               />
               <ChatArea conversation={currentConversation} />
-              <ContactInfo contact={selectedContact} />
+              <ContactInfo 
+                contact={selectedContact}
+                onAssignChat={handleAssignChat}
+              />
             </div>
           ) : (
             <PageContent pageId={activePage} />

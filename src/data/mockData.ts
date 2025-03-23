@@ -1,4 +1,4 @@
-import { Contact, Conversation, Message, Tag } from '../types';
+import { Contact, Conversation, Message, Tag, User, ChatSession } from '../types';
 
 export const mockContacts: Contact[] = [
   {
@@ -200,4 +200,75 @@ export const mockTags: Tag[] = [
   { id: '6', name: 'Won', isActive: true, color: '#16a34a' },
   { id: '7', name: 'Fake Lead', isActive: false, color: '#6b7280' },
   { id: '8', name: 'In Future', isActive: true, color: '#6366f1' }
+];
+
+export const mockUsers: User[] = [
+  {
+    id: 'user-1',
+    name: 'Shashank',
+    email: 'Shashank@example.com',
+    role: 'admin',
+    isActive: true
+  },
+  {
+    id: 'user-2',
+    name: 'Abhilekh',
+    email: 'Abhilekh@example.com',
+    role: 'agent',
+    isActive: true
+  },
+  {
+    id: 'user-3',
+    name: 'Himanshu',
+    email: 'Himanshu@example.com',
+    role: 'agent',
+    isActive: false
+  }
+];
+
+export const mockChatSessions: ChatSession[] = [
+  {
+    id: 'chat-1',
+    user: {
+      id: 'cust-1',
+      name: 'John Smith',
+      phone: '+1234567890'
+    },
+    assignedToId: 'user-2',
+    messages: [
+      {
+        id: 'msg-1',
+        sender: 'user',
+        text: 'Hello, I need help with my order',
+        timestamp: new Date('2023-06-15T10:30:00')
+      },
+      {
+        id: 'msg-2',
+        sender: 'agent',
+        text: 'Hi John, I\'d be happy to help. Can you provide your order number?',
+        timestamp: new Date('2023-06-15T10:32:00')
+      }
+    ],
+    unread: 0,
+    status: 'active'
+  },
+  {
+    id: 'chat-2',
+    user: {
+      id: 'cust-2',
+      name: 'Sarah Johnson',
+      phone: '+9876543210'
+    },
+    assignedToId: null,
+    messages: [
+      {
+        id: 'msg-3',
+        sender: 'user',
+        text: 'Is my delivery coming today?',
+        timestamp: new Date('2023-06-15T11:45:00')
+      }
+    ],
+    unread: 1,
+    status: 'active'
+  }
 ];
