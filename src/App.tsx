@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ConfigProvider, Dropdown } from 'antd';
 import { Bell, MessageCircleMore, User } from 'lucide-react';
 import Sidebar from './components/Sidebar';
@@ -7,26 +7,16 @@ import ChatArea from './components/ChatArea';
 import ContactInfo from './components/ContactInfo';
 import PageContent from './components/PageContent';
 import Footer from './components/Footer';
+import LoginPage from './components/LoginPage'; // Import the LoginPage component
 import { mockContacts, mockConversations } from './data/mockData';
 import { Contact, Conversation } from './types';
 
-// Create menu items for the dropdown
-const menuItems = [
-  {
-    key: '1',
-    label: 'Profile',
-  },
-  {
-    key: '2',
-    label: 'Settings',
-  },
-  {
-    key: '3',
-    label: 'Logout',
-  },
-];
-
 function App() {
+  // Check localStorage for login state
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  });
+
   const [selectedContact, setSelectedContact] = useState<Contact | undefined>();
   const [currentConversation, setCurrentConversation] = useState<Conversation | undefined>();
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
@@ -34,16 +24,49 @@ function App() {
 
   const handleSelectContact = (contact: Contact) => {
     setSelectedContact(contact);
-    const conversation = mockConversations.find(conv => conv.contact.id === contact.id);
+    const conversation = mockConversations.find((conv) => conv.contact.id === contact.id);
     setCurrentConversation(conversation);
   };
-  
+
   const handleSelectNavItem = (itemId: string) => {
     setActivePage(itemId);
   };
 
-  // Only show ChatList, ChatArea, and ContactInfo when on live-chat page
+  const handleLogout = () => {
+    setIsLoggedIn(false); // Set login state to false
+    localStorage.removeItem('isLoggedIn'); // Clear login state from localStorage
+  };
+
   const shouldShowChatInterface = activePage === 'live-chat';
+
+  // Create menu items for the dropdown
+  const menuItems = [
+    {
+      key: '1',
+      label: 'Profile',
+    },
+    {
+      key: '2',
+      label: 'Settings',
+    },
+    {
+      key: '3',
+      label: 'Logout',
+      onClick: handleLogout, // Call handleLogout when "Logout" is clicked
+    },
+  ];
+
+  // Render the login page if the user is not logged in
+  if (!isLoggedIn) {
+    return (
+      <LoginPage
+        setIsLoggedIn={(value: boolean) => {
+          setIsLoggedIn(value);
+          localStorage.setItem('isLoggedIn', 'true'); // Store login state in localStorage
+        }}
+      />
+    );
+  }
 
   return (
     <ConfigProvider
@@ -57,7 +80,7 @@ function App() {
       <div className="flex h-screen bg-gray-100">
         <div className="bg-[#128C7E] text-white py-2 px-4 fixed top-0 w-full z-10 flex items-center justify-between">
           <div className="flex items-center">
-          <MessageCircleMore className='mr-2'/>
+            <MessageCircleMore className="mr-2" />
             <h1 className="text-xl font-semibold"> WhatsApp Panel</h1>
           </div>
           <div className="flex items-center space-x-4">
@@ -70,14 +93,14 @@ function App() {
             </Dropdown>
           </div>
         </div>
-        
-        <Sidebar 
-          expanded={sidebarExpanded} 
-          onToggle={() => setSidebarExpanded(!sidebarExpanded)} 
+
+        <Sidebar
+          expanded={sidebarExpanded}
+          onToggle={() => setSidebarExpanded(!sidebarExpanded)}
           activeItem={activePage}
           onSelectItem={handleSelectNavItem}
         />
-        
+
         <div className="flex-1 flex flex-col" style={{ paddingBottom: '50px' }}>
           {shouldShowChatInterface ? (
             <div className="flex flex-1">
@@ -93,7 +116,7 @@ function App() {
             <PageContent pageId={activePage} />
           )}
         </div>
-        
+
         <Footer />
       </div>
     </ConfigProvider>
