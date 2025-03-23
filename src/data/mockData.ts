@@ -1,4 +1,4 @@
-import { Contact, Conversation, Message } from '../types';
+import { Contact, Conversation, Message, Tag } from '../types';
 
 export const mockContacts: Contact[] = [
   {
@@ -189,4 +189,15 @@ export const mockConversations: Conversation[] = [
     status: 'open',
     assignedTo: 'currentUser'
   }
+];
+
+export const mockTags: Tag[] = [
+  { id: '1', name: 'Not Attempted', isActive: true, color: '#f59e0b' },
+  { id: '2', name: 'Call Back', isActive: true, color: '#3b82f6' },
+  { id: '3', name: 'Lost', isActive: true, color: '#ef4444' },
+  { id: '4', name: 'Online Meeting', isActive: true, color: '#10b981' },
+  { id: '5', name: 'Offline Meeting', isActive: true, color: '#8b5cf6' },
+  { id: '6', name: 'Won', isActive: true, color: '#16a34a' },
+  { id: '7', name: 'Fake Lead', isActive: false, color: '#6b7280' },
+  { id: '8', name: 'In Future', isActive: true, color: '#6366f1' }
 ];

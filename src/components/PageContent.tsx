@@ -1,4 +1,5 @@
 import React from 'react';
+import ManageTags from './ManageTags';
 
 interface PageContentProps {
   pageId: string;
@@ -166,6 +167,9 @@ const PageContent: React.FC<PageContentProps> = ({ pageId }) => {
             </div>
           </div>
         );
+
+      case 'manage-tags':
+        return <ManageTags />;
 
       // The live chat page will show the current chat interface
       case 'live-chat':

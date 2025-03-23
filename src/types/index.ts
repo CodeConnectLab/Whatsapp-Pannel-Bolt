@@ -28,3 +28,10 @@ export interface Conversation {
   tags: string[];
   status: 'open' | 'resolved';
 }
+
+export interface Tag {
+  id: string;
+  name: string;
+  isActive: boolean;
+  color?: string;
+}
