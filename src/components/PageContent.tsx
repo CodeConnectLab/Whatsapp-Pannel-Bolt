@@ -4,11 +4,18 @@ import ManageUsers from './ManageUsers'; // Import the ManageUsers component
 
 interface PageContentProps {
   pageId: string;
+  onOpenChatInLivePanel?: (chatId: string) => void;
 }
 
-const PageContent: React.FC<PageContentProps> = ({ pageId }) => {
+const PageContent: React.FC<PageContentProps> = ({ pageId, onOpenChatInLivePanel }) => {
   // This is a simple component that renders different page content based on the active page ID
   
+  const handleChatHistoryClick = (chatId: string) => {
+    if (onOpenChatInLivePanel) {
+      onOpenChatInLivePanel(chatId);
+    }
+  };
+
   const renderPageContent = () => {
     switch (pageId) {
       case 'dashboard':
@@ -76,12 +83,20 @@ const PageContent: React.FC<PageContentProps> = ({ pageId }) => {
                   </select>
                 </div>
               </div>
-              <div className="border-t py-3">
+              <div 
+                className="border-t py-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                onClick={() => handleChatHistoryClick('chat-1')}
+                title="Click to open in Live Chat panel"
+              >
                 <p className="font-medium">John Smith - +1 234-567-8900</p>
                 <p className="text-gray-500 text-sm">Last message: Hello, I need help with my order.</p>
                 <p className="text-gray-400 text-xs">March 19, 2025 - 10:23 AM</p>
               </div>
-              <div className="border-t py-3">
+              <div 
+                className="border-t py-3 hover:bg-gray-50 cursor-pointer transition-colors"
+                onClick={() => handleChatHistoryClick('chat-2')}
+                title="Click to open in Live Chat panel"
+              >
                 <p className="font-medium">Sarah Johnson - +1 345-678-9012</p>
                 <p className="text-gray-500 text-sm">Last message: Thank you for your assistance!</p>
                 <p className="text-gray-400 text-xs">March 18, 2025 - 4:45 PM</p>
