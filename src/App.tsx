@@ -166,7 +166,7 @@ function App() {
           activeItem={activePage}
           onSelectItem={handleSelectNavItem}
         />
-        <div className="flex-1 flex flex-col" style={{ paddingBottom: '50px' }}>
+        <div className="flex-1 flex flex-col">
           {shouldShowChatInterface ? (
             <div className="flex flex-1">
               <ChatList
@@ -192,8 +192,8 @@ function App() {
             />
           )}
         </div>
-        <Footer />
       </div>
+        <Footer />
     </ConfigProvider>
   );
 }

@@ -114,7 +114,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ conversation, onSendMessage, onOpen
   ];
   
   return (
-    <div className="flex-1 flex flex-col bg-gray-50" style={{ marginTop: '48px' }}>
+    <div className="flex-1 flex flex-col bg-gray-50" style={{ marginTop: '48px', maxHeight: 'calc(100vh - 48px)' }}>
       <div className="bg-[#128C7E] text-white p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">

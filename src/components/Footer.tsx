@@ -5,7 +5,7 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
   
   return (
-    <div className="bg-gray-800 text-gray-300 py-3 px-4 text-sm fixed bottom-0 w-full z-10">
+    <div className="bg-gray-800 text-gray-300 py-3 px-4 text-sm  bottom-0 w-full z-10">
       <div className="flex items-center justify-between">
         <div className="flex items-center">
           <MessageCircleMore className='mr-2 text-green-400' size={16} />
