@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ConfigProvider, Dropdown } from 'antd';
+import { ConfigProvider, Dropdown, message } from 'antd';
 import { Bell, MessageCircleMore, User } from 'lucide-react';
 import Sidebar from './components/Sidebar';
 import ChatList from './components/ChatList';
@@ -7,7 +7,8 @@ import ChatArea from './components/ChatArea';
 import ContactInfo from './components/ContactInfo';
 import PageContent from './components/PageContent';
 import Footer from './components/Footer';
-import LoginPage from './components/LoginPage'; // Import the LoginPage component
+import LoginPage from './components/LoginPage';
+import LiveChat from './components/LiveChat'; // Import the LiveChat component
 import { mockContacts, mockConversations } from './data/mockData';
 import { Contact, Conversation } from './types';
 
@@ -16,13 +17,13 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
     return localStorage.getItem('isLoggedIn') === 'true';
   });
-
   const [contacts, setContacts] = useState<Contact[]>(mockContacts);
   const [conversations, setConversations] = useState<Conversation[]>(mockConversations);
   const [selectedContact, setSelectedContact] = useState<Contact | undefined>();
   const [currentConversation, setCurrentConversation] = useState<Conversation | undefined>();
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [activePage, setActivePage] = useState<string>('live-chat');
+  const [selectedChatSession, setSelectedChatSession] = useState<string | null>(null);
 
   const handleSelectContact = (contact: Contact) => {
     setSelectedContact(contact);
@@ -37,6 +38,30 @@ function App() {
   const handleLogout = () => {
     setIsLoggedIn(false); // Set login state to false
     localStorage.removeItem('isLoggedIn'); // Clear login state from localStorage
+  };
+
+  // Handle opening a message in LiveChat panel
+  const handleOpenInLiveChat = (messageId: string, conversationId: string) => {
+    // Store the selected chat session ID
+    setSelectedChatSession(conversationId);
+    
+    // Navigate to the LiveChat page
+    setActivePage('live-chat-panel');
+    
+    // Show a success message to indicate navigation
+    message.success('Opening conversation in Live Chat panel');
+  };
+
+  // Handler for opening a chat from history in Live Chat panel
+  const handleOpenChatInLivePanel = (chatId: string) => {
+    // Store the selected chat session ID
+    setSelectedChatSession(chatId);
+    
+    // Navigate to the LiveChat page
+    setActivePage('live-chat-panel');
+    
+    // Show a success message to indicate navigation
+    message.success('Opening conversation in Live Chat panel');
   };
 
   // Handle assigning a chat to a user
@@ -79,6 +104,7 @@ function App() {
   };
 
   const shouldShowChatInterface = activePage === 'live-chat';
+  const shouldShowLiveChatPanel = activePage === 'live-chat-panel';
 
   // Create menu items for the dropdown
   const menuItems = [
@@ -134,14 +160,12 @@ function App() {
             </Dropdown>
           </div>
         </div>
-
         <Sidebar
           expanded={sidebarExpanded}
           onToggle={() => setSidebarExpanded(!sidebarExpanded)}
           activeItem={activePage}
           onSelectItem={handleSelectNavItem}
         />
-
         <div className="flex-1 flex flex-col" style={{ paddingBottom: '50px' }}>
           {shouldShowChatInterface ? (
             <div className="flex flex-1">
@@ -150,17 +174,24 @@ function App() {
                 selectedContact={selectedContact}
                 onSelectContact={handleSelectContact}
               />
-              <ChatArea conversation={currentConversation} />
+              <ChatArea 
+                conversation={currentConversation} 
+                onOpenInLiveChat={handleOpenInLiveChat}
+              />
               <ContactInfo 
                 contact={selectedContact}
                 onAssignChat={handleAssignChat}
               />
             </div>
+          ) : shouldShowLiveChatPanel ? (
+            <LiveChat selectedChatId={selectedChatSession} />
           ) : (
-            <PageContent pageId={activePage} />
+            <PageContent 
+              pageId={activePage} 
+              onOpenChatInLivePanel={handleOpenChatInLivePanel}
+            />
           )}
         </div>
-
         <Footer />
       </div>
     </ConfigProvider>

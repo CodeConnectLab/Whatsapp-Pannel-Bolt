@@ -9,9 +9,10 @@ import Picker from '@emoji-mart/react';
 interface ChatAreaProps {
   conversation?: Conversation;
   onSendMessage?: (conversationId: string, message: Message) => void;
+  onOpenInLiveChat?: (messageId: string, conversationId: string) => void;
 }
 
-const ChatArea: React.FC<ChatAreaProps> = ({ conversation, onSendMessage }) => {
+const ChatArea: React.FC<ChatAreaProps> = ({ conversation, onSendMessage, onOpenInLiveChat }) => {
   const [messageText, setMessageText] = useState('');
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showAttachmentOptions, setShowAttachmentOptions] = useState(false);
@@ -70,6 +71,12 @@ const ChatArea: React.FC<ChatAreaProps> = ({ conversation, onSendMessage }) => {
     // Here you would handle file selection based on type
   };
 
+  const handleOpenInLiveChat = (messageId: string) => {
+    if (onOpenInLiveChat) {
+      onOpenInLiveChat(messageId, conversation.id);
+    }
+  };
+
   // Combine original messages with local ones for display
   const allMessages = [...conversation.messages, ...localMessages];
 
@@ -120,8 +127,6 @@ const ChatArea: React.FC<ChatAreaProps> = ({ conversation, onSendMessage }) => {
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            {/* <Button type="primary" ghost>Transfer</Button>
-            <Button type="primary" ghost>Resolve</Button> */}
             <Button type="text" icon={<MoreVertical size={20} className="text-white" />} />
           </div>
         </div>
@@ -137,7 +142,9 @@ const ChatArea: React.FC<ChatAreaProps> = ({ conversation, onSendMessage }) => {
                 message.type === 'sent'
                   ? 'bg-green-500 text-white'
                   : 'bg-white text-gray-900'
-              }`}
+              } cursor-pointer hover:opacity-90 transition-opacity`}
+              onClick={() => handleOpenInLiveChat(message.id)}
+              title="Click to open in Live Chat panel"
             >
               <p className="whitespace-pre-line">{message.content}</p>
               <div className="text-xs mt-1 flex justify-end">
