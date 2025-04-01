@@ -13,13 +13,16 @@ import {
   Space,
   Select
 } from 'antd';
+
 import { PlusCircle, Edit2, Trash2, Users } from 'lucide-react';
 
 // Define User type
 interface User {
   id: string;
   name: string;
+  mobile: string;
   email: string;
+  password: string;
   role: 'admin' | 'agent';
   isActive: boolean;
 }
@@ -29,27 +32,40 @@ const mockUsers: User[] = [
   {
     id: 'user-1',
     name: 'Shashank',
-    email: 'Shashank@example.com',
-    role: 'admin',
+    mobile: '+1 234-567-8900',
+    email: 'shashank@example.com',
+    password:'123456',
+    role: 'agent',
     isActive: true
   },
   {
     id: 'user-2',
     name: 'Abhilekh',
-    email: 'Abhilekh@example.com',
+    mobile: '+1 345-678-9012',
+    email: 'abhilekh@example.com',
+    password:'123456',
     role: 'agent',
-    isActive: true
+    isActive: false
   },
   {
     id: 'user-3',
     name: 'Himanshu',
-    email: 'Himanshu@example.com',
-    role: 'agent',
-    isActive: false
+    mobile: '+1 456-789-0123',
+    email: 'himanshu@example.com',
+    password:'123456',
+    role: 'admin',
+    isActive: true
   }
 ];
 
-const ManageUsers: React.FC = () => {
+interface ManageUsersProps {
+  onOpenChatInLivePanel?: (chatId: string) => void; // Add the handler as a prop
+  pageId?: string; // Optional prop for pageId
+}
+
+const ManageUsers: React.FC<ManageUsersProps> = ({ pageId='dashboard' , onOpenChatInLivePanel }) => {
+ 
+// const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
@@ -57,8 +73,23 @@ const ManageUsers: React.FC = () => {
   const [activeTab, setActiveTab] = useState('all');
   
   useEffect(() => {
-    // Initialize with mock data
-    setUsers(mockUsers);
+    
+      ////////  get role and email passed from localStorage to the component
+    const user = localStorage.getItem('user');
+    const userData = user ? JSON.parse(user) : null;
+    const role = userData ? userData?.role : null; // Get the role from localStorage
+    const email = userData ? userData?.email : null; // Get the email from localStorage
+    console.log('role', role);
+    console.log('email', email);
+    //////////  if role is agent then email match with the user email
+    if (role === 'agent') {
+      const agentUser = mockUsers.find(user => user.email === email);
+      if (agentUser) {
+        setUsers([agentUser]);
+      }
+    }else if (role === 'admin') {
+       setUsers(mockUsers);
+    } 
   }, []);
 
   const filteredUsers = users.filter(user => {
@@ -107,7 +138,9 @@ const ManageUsers: React.FC = () => {
         const newUser: User = {
           id: `user-${Date.now()}`,
           name: values.name,
+          mobile: values.mobile,
           email: values.email,
+          password: values.password,
           role: values.role,
           isActive: values.isActive
         };
@@ -147,18 +180,48 @@ const ManageUsers: React.FC = () => {
     ));
     message.success(`User ${user.isActive ? 'deactivated' : 'activated'} successfully`);
   };
+   let columns = [];
 
-  const columns = [
+   columns = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
     },
     {
+      title: 'Mobile',
+      dataIndex: 'mobile',
+      key: 'mobile',
+    },
+    {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
     },
+    {
+      title: 'Password',
+      dataIndex: 'password',
+      key: 'password',
+    },
+   
+    {
+      title: 'Chat',
+      dataIndex: 'chat',
+      key: 'chat',
+      render: (_: any, record: User) => (
+        <Button
+          type="link"
+          onClick={() => {
+            if (onOpenChatInLivePanel) {
+              onOpenChatInLivePanel(record.id); // Call the handler with the chat ID
+            }
+          }}
+        >
+          Open Chat
+        </Button>
+      ),
+    },
+    
     {
       title: 'Role',
       dataIndex: 'role',
@@ -208,6 +271,16 @@ const ManageUsers: React.FC = () => {
       ),
     },
   ];
+
+  const user = localStorage.getItem('user');
+  const userData = user ? JSON.parse(user) : null;
+  const role = userData ? userData.role : null;
+
+  if (role === 'agent') {
+    columns = columns.filter(col => col.key !== 'chat'); // Remove chat column for agents
+  }
+  
+
 
   return (
     <div className="p-6">
@@ -296,6 +369,14 @@ const ManageUsers: React.FC = () => {
           >
             <Input placeholder="Enter name" />
           </Form.Item>
+
+          <Form.Item
+            name="mobile"
+            label="Mobile"
+            rules={[{ required: true, message: 'Please enter mobile number' }]}
+          >
+            <Input placeholder="Enter mobile number" />
+          </Form.Item>
           
           <Form.Item
             name="email"
@@ -306,6 +387,14 @@ const ManageUsers: React.FC = () => {
             ]}
           >
             <Input placeholder="Enter email" />
+          </Form.Item>
+
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true, message: 'Please enter password' }]}
+          >
+            <Input.Password placeholder="Enter password" />
           </Form.Item>
           
           <Form.Item

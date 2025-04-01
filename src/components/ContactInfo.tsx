@@ -95,7 +95,7 @@ const ContactInfo: React.FC<ContactInfoProps> = ({ contact, onAssignChat }) => {
           </div>
         )}
         
-        <div>
+        <div className='hidden'>
           <h3 className="text-sm font-medium text-gray-500 mb-2 flex items-center">
             <UserCog size={16} className="mr-2" /> Assign To
           </h3>

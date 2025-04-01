@@ -9,6 +9,7 @@ export const mockContacts: Contact[] = [
     language: 'English',
     lastActive: new Date(),
     status: 'online',
+    seen: true,
     unreadCount: 2
   },
   {
@@ -17,6 +18,7 @@ export const mockContacts: Contact[] = [
     phone: '919140069609',
     lastActive: new Date(Date.now() - 3600000),
     status: 'offline',
+    seen: true,
     unreadCount: 0
   },
   {
@@ -28,6 +30,7 @@ export const mockContacts: Contact[] = [
     lastActive: new Date(Date.now() - 1800000),
     status: 'online',
     unreadCount: 3,
+    seen: true,
     assignedTo: 'currentUser'
   },
   {
@@ -38,6 +41,7 @@ export const mockContacts: Contact[] = [
     language: 'English',
     lastActive: new Date(Date.now() - 7200000),
     status: 'offline',
+    seen: false,
     unreadCount: 1
   },
   {
@@ -47,8 +51,27 @@ export const mockContacts: Contact[] = [
     lastActive: new Date(Date.now() - 5400000),
     status: 'offline',
     unreadCount: 0,
+    seen: false,
     assignedTo: 'currentUser'
-  }
+  },
+  // {
+  //   id: '6',
+  //   name: 'Ashish Sharma',
+  //   phone: '8787676743',
+  //   lastActive: new Date(Date.now() - 5400000),
+  //   status: 'offline',
+  //   unreadCount: 0,
+  //   assignedTo: 'currentUser'
+  // },
+  // {
+  //   id: '7',
+  //   name: 'Siddharth Singh',
+  //   phone: '9187654321',
+  //   lastActive: new Date(Date.now() - 5400000),
+  //   status: 'offline',
+  //   unreadCount: 0,
+  //   assignedTo: 'currentUser'
+  // },
 ];
 
 export const mockMessages: Message[] = [

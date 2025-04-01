@@ -1,13 +1,36 @@
 import React from 'react';
 import ManageTags from './ManageTags';
 import ManageUsers from './ManageUsers'; // Import the ManageUsers component
-
+import Contacts from './Contacts';
+import TemplateManager from './TemplateManager'; // Import the TemplateManager component
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
 interface PageContentProps {
   pageId: string;
   onOpenChatInLivePanel?: (chatId: string) => void;
 }
 
 const PageContent: React.FC<PageContentProps> = ({ pageId, onOpenChatInLivePanel }) => {
+  const chatsPerMonthData = [
+    { month: 'Jan', chats: 120 },
+    { month: 'Feb', chats: 200 },
+    { month: 'Mar', chats: 150 },
+    { month: 'Apr', chats: 180 },
+    { month: 'May', chats: 220 },
+    { month: 'Jun', chats: 300 },
+  ];
+
+  const messagesPerAgentData = [
+    { agent: 'Shashank', messages: 400 },
+    { agent: 'Abhilekh', messages: 300 },
+    { agent: 'Himanshu', messages: 500 },
+  ];
+
+  const responseRateData = [
+    { name: 'Responded', value: 85 },
+    { name: 'Missed', value: 15 },
+  ];
+
+  const COLORS = ['#0088FE', '#FF8042'];
   // This is a simple component that renders different page content based on the active page ID
   
   const handleChatHistoryClick = (chatId: string) => {
@@ -18,46 +41,220 @@ const PageContent: React.FC<PageContentProps> = ({ pageId, onOpenChatInLivePanel
 
   const renderPageContent = () => {
     switch (pageId) {
+      // case 'dashboard':
+      //  return (
+      //           <div className="p-6">
+      //             <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+      //             <p>Welcome to your WhatsApp dashboard!</p>
+      //             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      //               {/* Active Conversations */}
+      //               <div className="bg-white p-4 rounded-lg shadow">
+      //                 <h3 className="font-medium text-lg">Active Conversations</h3>
+      //                 <p className="text-3xl font-bold mt-2">24</p>
+      //               </div>
+      
+      //               {/* Messages Today */}
+      //               <div className="bg-white p-4 rounded-lg shadow">
+      //                 <h3 className="font-medium text-lg">Messages Today</h3>
+      //                 <p className="text-3xl font-bold mt-2">156</p>
+      //               </div>
+      
+      //               {/* Response Rate */}
+      //               <div className="bg-white p-4 rounded-lg shadow">
+      //                 <h3 className="font-medium text-lg">Response Rate</h3>
+      //                 {/* ///////////incresing arrwo */}
+      //                 <div className="flex items-center justify-between mt-2">
+      //                   <p className="text-3xl font-bold mt-2">98%</p>
+      //                   <svg className="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+      //                   </svg>
+      //                 </div>
+      //                 </div>   
+      //             </div>
+      
+      //             {/* Graphs Section */}
+      //             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+      //               {/* Chats Per Month Graph */}
+      //               <div className="bg-white p-4 rounded-lg shadow">
+      //                 <h3 className="font-medium text-lg mb-4">Chats Per Month</h3>
+      //                 <ResponsiveContainer width="100%" height={200}>
+      //                   <LineChart data={chatsPerMonthData}>
+      //                     <CartesianGrid strokeDasharray="3 3" />
+      //                     <XAxis dataKey="month" />
+      //                     <YAxis />
+      //                     <Tooltip />
+      //                     <Line type="monotone" dataKey="chats" stroke="#8884d8" strokeWidth={2} />
+      //                   </LineChart>
+      //                 </ResponsiveContainer>
+      //               </div>
+      
+      //               {/* Messages Per Agent Graph */}
+      //               <div className="bg-white p-4 rounded-lg shadow">
+      //                 <h3 className="font-medium text-lg mb-4">Messages Per Agent</h3>
+      //                 <ResponsiveContainer width="100%" height={200}>
+      //                   <BarChart data={messagesPerAgentData}>
+      //                     <CartesianGrid strokeDasharray="3 3" />
+      //                     <XAxis dataKey="agent" />
+      //                     <YAxis />
+      //                     <Tooltip />
+      //                     <Bar dataKey="messages" fill="#82ca9d" />
+      //                   </BarChart>
+      //                 </ResponsiveContainer>
+      //               </div>
+      
+      //               {/* Response Rate Pie Chart */}
+      //               <div className="bg-white p-4 rounded-lg shadow">
+      //                 <h3 className="font-medium text-lg mb-4">Response Rate</h3>
+      //                 <ResponsiveContainer width="100%" height={200}>
+      //                   <PieChart>
+      //                     <Pie
+      //                       data={responseRateData}
+      //                       dataKey="value"
+      //                       nameKey="name"
+      //                       cx="50%"
+      //                       cy="50%"
+      //                       outerRadius={80}
+      //                       fill="#8884d8"
+      //                       label
+      //                     >
+      //                       {responseRateData.map((entry, index) => (
+      //                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+      //                       ))}
+      //                     </Pie>
+      //                     <Tooltip />
+      //                   </PieChart>
+      //                 </ResponsiveContainer>
+      //               </div>
+      //             </div>
+      //           </div>
+      //         );
       case 'dashboard':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-            <p>Welcome to your WhatsApp dashboard!</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h3 className="font-medium text-lg">Active Conversations</h3>
-                <p className="text-3xl font-bold mt-2">24</p>
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h3 className="font-medium text-lg">Messages Today</h3>
-                <p className="text-3xl font-bold mt-2">156</p>
-              </div>
-              <div className="bg-white p-4 rounded-lg shadow">
-                <h3 className="font-medium text-lg">Response Rate</h3>
-                <p className="text-3xl font-bold mt-2">98%</p>
-              </div>
-            </div>
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+      <p>Welcome to your WhatsApp dashboard!</p>
+
+      {/* Statistics Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {/* Active Conversations */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg">Active Conversations</h3>
+          <p className="text-3xl font-bold mt-2">24</p>
+        </div>
+
+        {/* Messages Today */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg">Messages Today</h3>
+          <p className="text-3xl font-bold mt-2">156</p>
+        </div>
+
+        {/* Response Rate */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg">Response Rate</h3>
+          <div className="flex items-center justify-between mt-2">
+            <p className="text-3xl font-bold mt-2">98%</p>
+            <svg
+              className="w-6 h-6 text-green-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
           </div>
-        );
+        </div>
+
+        {/* Total Users */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg">Total Users</h3>
+          <p className="text-3xl font-bold mt-2">1,245</p>
+        </div>
+
+        {/* New Users Today */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg">New Users Today</h3>
+          <p className="text-3xl font-bold mt-2">32</p>
+        </div>
+
+        {/* Average Response Time */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg">Avg. Response Time</h3>
+          <p className="text-3xl font-bold mt-2">2m 45s</p>
+        </div>
+      </div>
+
+      {/* Graphs Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {/* Chats Per Month Graph */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg mb-4">Chats Per Month</h3>
+          <ResponsiveContainer width="100%" height={200}>
+            <LineChart data={chatsPerMonthData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="chats"
+                stroke="#8884d8"
+                strokeWidth={2}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Messages Per Agent Graph */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg mb-4">Messages Per Agent</h3>
+          <ResponsiveContainer width="100%" height={200}>
+            <BarChart data={messagesPerAgentData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="agent" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="messages" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Response Rate Pie Chart */}
+        <div className="bg-white p-4 rounded-lg shadow">
+          <h3 className="font-medium text-lg mb-4">Response Rate</h3>
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart>
+              <Pie
+                data={responseRateData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                fill="#8884d8"
+                label
+              >
+                {responseRateData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
+  );
 
       case 'template':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Message Templates</h1>
-            <p>Manage your WhatsApp message templates here.</p>
-            <div className="bg-white p-4 rounded-lg shadow mt-6">
-              <h3 className="font-medium text-lg mb-4">Your Templates</h3>
-              <div className="border rounded-lg p-4 mb-4">
-                <h4 className="font-medium">Welcome Message</h4>
-                <p className="text-gray-600 mt-2">Hello , welcome to our service! How can we help you today?</p>
-              </div>
-              <div className="border rounded-lg p-4 mb-4">
-                <h4 className="font-medium">Order Confirmation</h4>
-                <p className="text-gray-600 mt-2">Your order has been confirmed and will be shipped within 24 hours.</p>
-              </div>
-            </div>
-          </div>
-        );
+       return (<TemplateManager />); // Use the TemplateManager component
 
       case 'users':
         return <ManageUsers />; // Use the ManageUsers component
@@ -106,57 +303,12 @@ const PageContent: React.FC<PageContentProps> = ({ pageId, onOpenChatInLivePanel
         );
 
       case 'contacts':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Contacts</h1>
-            <p>Manage your WhatsApp contacts.</p>
-            <div className="bg-white p-4 rounded-lg shadow mt-6">
-              <div className="flex justify-between mb-4">
-                <input
-                  type="text"
-                  placeholder="Search contacts..."
-                  className="border rounded-lg px-3 py-2 w-64"
-                />
-                <button className="bg-green-500 text-white px-4 py-2 rounded-lg">Add New Contact</button>
-              </div>
-              <table className="min-w-full">
-                <thead>
-                  <tr>
-                    <th className="text-left py-2 px-3">Name</th>
-                    <th className="text-left py-2 px-3">Phone</th>
-                    <th className="text-left py-2 px-3">Last Contact</th>
-                    <th className="text-left py-2 px-3">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-t">
-                    <td className="py-2 px-3">John Smith</td>
-                    <td className="py-2 px-3">+1 234-567-8900</td>
-                    <td className="py-2 px-3">March 19, 2025</td>
-                    <td className="py-2 px-3">
-                      <button className="text-blue-500 mr-2">Edit</button>
-                      <button className="text-green-500">Message</button>
-                    </td>
-                  </tr>
-                  <tr className="border-t">
-                    <td className="py-2 px-3">Sarah Johnson</td>
-                    <td className="py-2 px-3">+1 345-678-9012</td>
-                    <td className="py-2 px-3">March 18, 2025</td>
-                    <td className="py-2 px-3">
-                      <button className="text-blue-500 mr-2">Edit</button>
-                      <button className="text-green-500">Message</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
+        return <Contacts />; // Use the Contacts component
 
       case 'manage-tags':
         return <ManageTags />;
 
-      // The live chat page will show the current chat interface
+      // The live chat page will show the current chat interface  live-chat
       case 'live-chat':
       default:
         return null; // This will be rendered by the existing ChatList and ChatArea components

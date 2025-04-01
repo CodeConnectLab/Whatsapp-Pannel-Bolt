@@ -127,7 +127,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ conversation, onSendMessage, onOpen
             </div>
           </div>
           <div className="flex items-center space-x-2">
-            <Button type="text" icon={<MoreVertical size={20} className="text-white" />} />
+            {/* <Button type="text" icon={<MoreVertical size={20} className="text-white" />} /> */}
           </div>
         </div>
       </div>

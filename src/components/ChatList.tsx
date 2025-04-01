@@ -12,13 +12,33 @@ interface ChatListProps {
 
 const ChatList: React.FC<ChatListProps> = ({ contacts, selectedContact, onSelectContact }) => {
   const [activeTab, setActiveTab] = useState('all');
+  const [unseenContacts, setUnseenContacts] = useState(
+    contacts.map(contact => ({ ...contact, unseen: true })) // Initialize all contacts as unseen
+  );
 
-  const filteredContacts = contacts.filter(contact => {
+  const handleSeen = (contactId: string) => {
+    setUnseenContacts(prevState => {
+      const updatedContacts = prevState.map(contact =>
+        contact.id === contactId ? { ...contact, unseen: false } : contact
+      );
+
+      // Ensure at least 2 contacts remain unseen
+      const unseenCount = updatedContacts.filter(contact => contact.unseen).length;
+      // if (unseenCount < 2) {
+      //   const firstSeenContact = updatedContacts.find(contact => !contact.unseen);
+      //   if (firstSeenContact) {
+      //     firstSeenContact.unseen = true;
+      //   }
+      // }
+
+      return [...updatedContacts];
+    });
+  };
+
+  const filteredContacts = unseenContacts.filter(contact => {
     switch (activeTab) {
-      case 'mine':
-        return contact.assignedTo === 'currentUser';
-      case 'unassigned':
-        return !contact.assignedTo;
+      case 'unseen':
+        return contact.unseen;
       default:
         return true;
     }
@@ -32,9 +52,24 @@ const ChatList: React.FC<ChatListProps> = ({ contacts, selectedContact, onSelect
           activeKey={activeTab}
           onChange={setActiveTab}
           items={[
-            { key: 'all', label: <div className="flex items-center">All <span className="ml-1 bg-green-500 text-white rounded-full px-2 text-xs">{contacts.length}</span></div> },
-            { key: 'mine', label: 'Mine' },
-            { key: 'unassigned', label: <div className="flex items-center">Unassigned <span className="ml-1 bg-yellow-500 text-white rounded-full px-2 text-xs">1</span></div> }
+            {
+              key: 'all',
+              label: (
+                <div className="flex items-center">
+                  All <span className="ml-1 bg-green-500 text-white rounded-full px-2 text-xs">{unseenContacts.length}</span>
+                </div>
+              )
+            },
+            {
+              key: 'unseen',
+              label: (
+                <div className="flex items-center">
+                  Unseen Messages <span className="ml-1 bg-red-500 text-white rounded-full px-2 text-xs">
+                    {unseenContacts.filter(contact => contact.unseen).length}
+                  </span>
+                </div>
+              )
+            }
           ]}
         />
         <Input
@@ -43,15 +78,18 @@ const ChatList: React.FC<ChatListProps> = ({ contacts, selectedContact, onSelect
           className="rounded-lg mt-4"
         />
       </div>
-      
+
       <div className="flex-1 overflow-y-auto">
-        {filteredContacts.map((contact) => (
+        {filteredContacts.map(contact => (
           <div
             key={contact.id}
             className={`p-4 cursor-pointer hover:bg-gray-50 ${
               selectedContact?.id === contact.id ? 'bg-gray-50' : ''
             }`}
-            onClick={() => onSelectContact(contact)}
+            onClick={() => {
+              onSelectContact(contact);
+              handleSeen(contact.id); // Mark as seen when clicked
+            }}
           >
             <div className="flex items-center">
               <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-medium">

@@ -22,7 +22,7 @@ function App() {
   const [selectedContact, setSelectedContact] = useState<Contact | undefined>();
   const [currentConversation, setCurrentConversation] = useState<Conversation | undefined>();
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
-  const [activePage, setActivePage] = useState<string>('live-chat');
+  const [activePage, setActivePage] = useState<string>('dashboard');
   const [selectedChatSession, setSelectedChatSession] = useState<string | null>(null);
 
   const handleSelectContact = (contact: Contact) => {
@@ -37,7 +37,9 @@ function App() {
 
   const handleLogout = () => {
     setIsLoggedIn(false); // Set login state to false
+    localStorage.removeItem('user'); // Clear user data from localStorage
     localStorage.removeItem('isLoggedIn'); // Clear login state from localStorage
+    setActivePage('dashboard')
   };
 
   // Handle opening a message in LiveChat panel
@@ -145,6 +147,8 @@ function App() {
       }}
     >
       <div className="flex h-screen bg-gray-100">
+
+        {/* #/////////////this is header/////////// */}
         <div className="bg-[#128C7E] text-white py-2 px-4 fixed top-0 w-full z-10 flex items-center justify-between">
           <div className="flex items-center">
             <MessageCircleMore className="mr-2" />
@@ -160,6 +164,8 @@ function App() {
             </Dropdown>
           </div>
         </div>
+        {/* #/////////////this is header/////////// */}
+
         <Sidebar
           expanded={sidebarExpanded}
           onToggle={() => setSidebarExpanded(!sidebarExpanded)}

@@ -4,17 +4,57 @@ interface LoginPageProps {
   setIsLoggedIn: (value: boolean) => void; // Prop to update the login state
 }
 
+const loginCredentialsData = [
+  {
+    id: 'user-1',
+    name: 'Shashank',
+    email: 'shashank@example.com',
+    password: '123456',
+    role: 'agent',
+    isActive: true,
+  },
+  {
+    id: 'user-2',
+    name: 'Abhilekh',
+    email: 'abhilekh@example.com',
+    password: '123456',
+    role: 'agent',
+    isActive: false,
+  },
+  {
+    id: 'user-3',
+    name: 'Himanshu',
+    email: 'himanshu@example.com',
+    password: '123456',
+    role: 'admin',
+    isActive: true,
+  },
+];
+
 const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = () => {
-    // Check if the email and password match the hardcoded credentials
-    if (email === 'admin@gmail.com' && password === '123456') {
-      setIsLoggedIn(true); // Set the login state to true
+    const user = loginCredentialsData.find(
+      (u) => u.email === email && u.password === password
+    );
+
+    if (user) {
+
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        })
+      );
+      setIsLoggedIn(true);
+      //window.location.reload(); // Reload the page to reflect the login state
     } else {
-      setError('Invalid email or password'); // Show an error message
+      setError('Invalid email or password');
     }
   };
 
@@ -55,9 +95,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ setIsLoggedIn }) => {
         >
           Log In
         </button>
-        <p className="text-center text-sm text-gray-600 mt-4">
-          Not a member yet? <a href="#" className="text-green-500 hover:underline">Sign up</a>
-        </p>
       </div>
     </div>
   );
