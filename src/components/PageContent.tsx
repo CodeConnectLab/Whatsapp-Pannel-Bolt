@@ -4,6 +4,7 @@ import ManageUsers from './ManageUsers'; // Import the ManageUsers component
 import Contacts from './Contacts';
 import TemplateManager from './TemplateManager'; // Import the TemplateManager component
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 interface PageContentProps {
   pageId: string;
   onOpenChatInLivePanel?: (chatId: string) => void;
@@ -38,97 +39,20 @@ const PageContent: React.FC<PageContentProps> = ({ pageId, onOpenChatInLivePanel
       onOpenChatInLivePanel(chatId);
     }
   };
+ 
+
+  
+  const yourChatPanelHandler = (chatId: string, navigate: ReturnType<typeof useNavigate>) => {
+    console.log('Opening chat in Live Chat panel:', pageId, chatId);
+    if (onOpenChatInLivePanel) {
+      onOpenChatInLivePanel(chatId); // Notify the parent to update the pageId and handle the chat
+    }
+    navigate('/live-chat-panel'); // Navigate to the live chat panel
+  };
 
   const renderPageContent = () => {
     switch (pageId) {
-      // case 'dashboard':
-      //  return (
-      //           <div className="p-6">
-      //             <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-      //             <p>Welcome to your WhatsApp dashboard!</p>
-      //             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-      //               {/* Active Conversations */}
-      //               <div className="bg-white p-4 rounded-lg shadow">
-      //                 <h3 className="font-medium text-lg">Active Conversations</h3>
-      //                 <p className="text-3xl font-bold mt-2">24</p>
-      //               </div>
-      
-      //               {/* Messages Today */}
-      //               <div className="bg-white p-4 rounded-lg shadow">
-      //                 <h3 className="font-medium text-lg">Messages Today</h3>
-      //                 <p className="text-3xl font-bold mt-2">156</p>
-      //               </div>
-      
-      //               {/* Response Rate */}
-      //               <div className="bg-white p-4 rounded-lg shadow">
-      //                 <h3 className="font-medium text-lg">Response Rate</h3>
-      //                 {/* ///////////incresing arrwo */}
-      //                 <div className="flex items-center justify-between mt-2">
-      //                   <p className="text-3xl font-bold mt-2">98%</p>
-      //                   <svg className="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      //                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-      //                   </svg>
-      //                 </div>
-      //                 </div>   
-      //             </div>
-      
-      //             {/* Graphs Section */}
-      //             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-      //               {/* Chats Per Month Graph */}
-      //               <div className="bg-white p-4 rounded-lg shadow">
-      //                 <h3 className="font-medium text-lg mb-4">Chats Per Month</h3>
-      //                 <ResponsiveContainer width="100%" height={200}>
-      //                   <LineChart data={chatsPerMonthData}>
-      //                     <CartesianGrid strokeDasharray="3 3" />
-      //                     <XAxis dataKey="month" />
-      //                     <YAxis />
-      //                     <Tooltip />
-      //                     <Line type="monotone" dataKey="chats" stroke="#8884d8" strokeWidth={2} />
-      //                   </LineChart>
-      //                 </ResponsiveContainer>
-      //               </div>
-      
-      //               {/* Messages Per Agent Graph */}
-      //               <div className="bg-white p-4 rounded-lg shadow">
-      //                 <h3 className="font-medium text-lg mb-4">Messages Per Agent</h3>
-      //                 <ResponsiveContainer width="100%" height={200}>
-      //                   <BarChart data={messagesPerAgentData}>
-      //                     <CartesianGrid strokeDasharray="3 3" />
-      //                     <XAxis dataKey="agent" />
-      //                     <YAxis />
-      //                     <Tooltip />
-      //                     <Bar dataKey="messages" fill="#82ca9d" />
-      //                   </BarChart>
-      //                 </ResponsiveContainer>
-      //               </div>
-      
-      //               {/* Response Rate Pie Chart */}
-      //               <div className="bg-white p-4 rounded-lg shadow">
-      //                 <h3 className="font-medium text-lg mb-4">Response Rate</h3>
-      //                 <ResponsiveContainer width="100%" height={200}>
-      //                   <PieChart>
-      //                     <Pie
-      //                       data={responseRateData}
-      //                       dataKey="value"
-      //                       nameKey="name"
-      //                       cx="50%"
-      //                       cy="50%"
-      //                       outerRadius={80}
-      //                       fill="#8884d8"
-      //                       label
-      //                     >
-      //                       {responseRateData.map((entry, index) => (
-      //                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-      //                       ))}
-      //                     </Pie>
-      //                     <Tooltip />
-      //                   </PieChart>
-      //                 </ResponsiveContainer>
-      //               </div>
-      //             </div>
-      //           </div>
-      //         );
-      case 'dashboard':
+       case 'dashboard':
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
@@ -257,7 +181,7 @@ const PageContent: React.FC<PageContentProps> = ({ pageId, onOpenChatInLivePanel
        return (<TemplateManager />); // Use the TemplateManager component
 
       case 'users':
-        return <ManageUsers />; // Use the ManageUsers component
+        return <ManageUsers  pageId={pageId} onOpenChatInLivePanel={yourChatPanelHandler}  />; // Use the ManageUsers component
 
       case 'history':
         return (

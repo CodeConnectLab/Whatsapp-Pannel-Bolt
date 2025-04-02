@@ -63,7 +63,7 @@ interface ManageUsersProps {
   pageId?: string; // Optional prop for pageId
 }
 
-const ManageUsers: React.FC<ManageUsersProps> = ({ pageId='dashboard' , onOpenChatInLivePanel }) => {
+const ManageUsers: React.FC<ManageUsersProps> = ({ pageId = 'live-chat', onOpenChatInLivePanel = () => {} }) => {
  
 // const ManageUsers: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -204,21 +204,29 @@ const ManageUsers: React.FC<ManageUsersProps> = ({ pageId='dashboard' , onOpenCh
       key: 'password',
     },
    
+    // {
+    //   title: 'Chat',
+    //   dataIndex: 'chat',
+    //   key: 'chat',
+    //   render: (_: any, record: User) => (
+    //     <Button
+    //       type="link"
+    //       onClick={() => {
+    //         console.log('Chat ID1:', onOpenChatInLivePanel); 
+    //         if (onOpenChatInLivePanel) {
+    //           console.log('Chat ID:', record.id); // Log the chat ID
+    //           onOpenChatInLivePanel(record.id); // Call the handler with the chat ID
+    //         }
+    //       }}
+    //     >
+    //       Open Chat
+    //     </Button>
+    //   ),
+    // },
+
     {
-      title: 'Chat',
-      dataIndex: 'chat',
-      key: 'chat',
-      render: (_: any, record: User) => (
-        <Button
-          type="link"
-          onClick={() => {
-            if (onOpenChatInLivePanel) {
-              onOpenChatInLivePanel(record.id); // Call the handler with the chat ID
-            }
-          }}
-        >
-          Open Chat
-        </Button>
+      title: 'Chat', dataIndex: 'chat', key: 'chat', render: (_: any, record: User) => (
+        <Button type="link" onClick={() => onOpenChatInLivePanel(record.id)}>Open Chat</Button>
       ),
     },
     

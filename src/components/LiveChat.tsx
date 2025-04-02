@@ -102,7 +102,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ selectedChatId }) => {
           )
         );
       } else {
-        message.error('Chat session not found');
+        // message.error('Chat session not found');
       }
     }
   }, [selectedChatId, chatSessions]);
@@ -300,7 +300,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ selectedChatId }) => {
                         className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full"
                         title={`Assigned to: ${getAssignedAgentName(chat.assignedToId)}`}
                       >
-                        {getAssignedAgentName(chat.assignedToId)}
+                        {/* {getAssignedAgentName(chat.assignedToId)} */}
                       </div>
                     </div>
                   </div>

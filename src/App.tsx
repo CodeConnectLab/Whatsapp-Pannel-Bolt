@@ -11,6 +11,7 @@ import LoginPage from './components/LoginPage';
 import LiveChat from './components/LiveChat'; // Import the LiveChat component
 import { mockContacts, mockConversations } from './data/mockData';
 import { Contact, Conversation } from './types';
+import ManageUsers from './components/ManageUsers';
 
 function App() {
   // Check localStorage for login state
@@ -56,6 +57,7 @@ function App() {
 
   // Handler for opening a chat from history in Live Chat panel
   const handleOpenChatInLivePanel = (chatId: string) => {
+    console.log('Opening chat in Live Chat panel:1111111', activePage, chatId);
     // Store the selected chat session ID
     setSelectedChatSession(chatId);
     
@@ -107,6 +109,7 @@ function App() {
 
   const shouldShowChatInterface = activePage === 'live-chat';
   const shouldShowLiveChatPanel = activePage === 'live-chat-panel';
+  const shouldShowManageUser = activePage === 'manage-tags';
 
   // Create menu items for the dropdown
   const menuItems = [
@@ -191,7 +194,8 @@ function App() {
             </div>
           ) : shouldShowLiveChatPanel ? (
             <LiveChat selectedChatId={selectedChatSession} />
-          ) : (
+          )
+           :(
             <PageContent 
               pageId={activePage} 
               onOpenChatInLivePanel={handleOpenChatInLivePanel}
